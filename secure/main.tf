@@ -174,11 +174,11 @@ resource "aws_security_group" "web" {
   }
 
   egress {
-    description = "HTTPS out"
+    description = "HTTPS within the VPC only"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.main.cidr_block]
   }
 }
 
