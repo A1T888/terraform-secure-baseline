@@ -1,0 +1,41 @@
+name: terraform-security
+on: [push, pull_request]
+
+jobs:
+  hardened-must-pass:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: hashicorp/setup-terraform@v3
+      - name: Format check
+        run: terraform fmt -check -recursive
+      - name: Secrets scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkov (hardened stack)
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: secure/
+          framework: terraform
+      - name: Trivy IaC (hardened stack)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: config
+          scan-ref: secure/
+          exit-code: 1
+          severity: HIGH,CRITICAL
+
+  insecure-must-fail:
+    # Proves the scanners catch the deliberate flaws. Failure here is the expected result.
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkov (insecure stack)
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: insecure/
+          framework: terraform

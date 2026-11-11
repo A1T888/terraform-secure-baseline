@@ -1,0 +1,9 @@
+# The insecure/ stack contains fake, AWS-documentation example credentials on purpose.
+title = "terraform-secure-baseline"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Intentional fake credentials in the insecure demo"
+paths = ['''insecure/main\.tf''']
