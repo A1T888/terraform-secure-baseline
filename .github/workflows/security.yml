@@ -21,7 +21,7 @@ jobs:
           directory: secure/
           framework: terraform
       - name: Trivy IaC (hardened stack)
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: config
           scan-ref: secure/
