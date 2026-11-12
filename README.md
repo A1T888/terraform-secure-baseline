@@ -25,8 +25,6 @@ Infrastructure as code moves security decisions into the code review stage. One 
 
 CI runs on every push: the hardened stack must pass, and the insecure stack is expected to fail.
 
-![Scan results](docs/scan-results/ci-run.png)
-
 ## What is in the repo
 
 ```
@@ -35,7 +33,6 @@ terraform-secure-baseline/
 ├── secure/main.tf              # hardened version of the same stack
 ├── policies/ssh_open.rego      # custom OPA/Conftest rules
 ├── docs/control-mapping.md     # fixes mapped to ISO 27001:2022 Annex A
-├── docs/scan-results/          # screenshots
 └── .github/workflows/security.yml
 ```
 
