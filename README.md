@@ -1,5 +1,7 @@
 # terraform-secure-baseline
 
+[![terraform-security](https://github.com/A1T888/terraform-secure-baseline/actions/workflows/security.yml/badge.svg)](https://github.com/A1T888/terraform-secure-baseline/actions/workflows/security.yml)
+
 Static-analysis security showcase for Terraform. The same AWS stack is written twice:
 `insecure/` (deliberately flawed) and `secure/` (hardened). Free scanners and policy-as-code
 prove the difference. **Nothing is deployed and no cloud account is needed.**
