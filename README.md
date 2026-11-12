@@ -1,10 +1,13 @@
-## terraform-secure-baseline
+# terraform-secure-baseline
 
 [![terraform-security](https://github.com/A1T888/terraform-secure-baseline/actions/workflows/security.yml/badge.svg)](https://github.com/A1T888/terraform-secure-baseline/actions/workflows/security.yml)
 
 A zero-cost Terraform security demo. The same small AWS stack is written twice: `insecure/` (deliberately flawed) and `secure/` (hardened). Free scanners and policy-as-code show the difference, and a CI pipeline enforces it. Each fix is mapped to an ISO/IEC 27001:2022 Annex A control.
 
 **Nothing is deployed and no cloud account is needed.** Everything runs as static analysis on the `.tf` files.
+
+> [!WARNING]
+> `insecure/` is deliberately vulnerable and is for demonstration only. Do not deploy it. The access keys in that folder are the public example keys from AWS documentation, not real credentials.
 
 ## Why this exists
 
@@ -92,13 +95,11 @@ The hardened stack has 9 inline `#checkov:skip` comments, each with a written re
 
 ## Lessons learned
 
-> Replace this section with your own words before publishing. Keep only points you could explain in an interview.
-
-- **One scanner is not enough.** Checkov passed the hardened stack, but Trivy flagged a high-severity rule on a security group allowing egress to `0.0.0.0/0`. Two scanners with different rule sets caught what one missed.
-- **Not every finding should be "fixed".** Some checks needed extra cost or infrastructure, and some were false positives. Documenting each skip with a reason lets a reviewer challenge a decision instead of finding a silent suppression.
-- **A failing job can be the correct result.** The insecure stack is meant to fail CI. That is the evidence the gate works.
-- **Passing scans is not the same as secure.** These tools check known patterns. They do not prove the design is sound.
-- **Control mapping is judgement.** There is no official crosswalk from Checkov rules to Annex A, so each link is a choice.
+- **A second scanner found something the first missed.** Checkov passed the hardened stack, but Trivy flagged a security group allowing egress to `0.0.0.0/0` (AWS-0104). That is one finding, not proof that two scanners always beat one, but it showed that their rule sets differ.
+- **A scan-clean fix is not a tested fix.** I restricted egress to the VPC range to satisfy Trivy. In a real deployment that could block access to AWS services unless VPC endpoints are added, and I have not applied the stack to verify.
+- **Skips need reasons.** Of the 9 skips, six were cost or scope items and three were false positives on KMS key policies. Writing the reason next to each one lets a reviewer challenge the decision instead of finding a silent suppression.
+- **The insecure stack is a negative test.** CI is meant to fail on it, and that proves the gate catches real flaws. A red cross inside a passing run is confusing, so the pipeline section explains it.
+- **Scanners are evidence, not compliance.** They check technical configuration. ISO 27001 Annex A also covers policy, process and review, so a passing check supports a control without proving it. The mapping is my own judgement of the closest control.
 
 ## Next steps
 
@@ -106,7 +107,3 @@ The hardened stack has 9 inline `#checkov:skip` comments, each with a written re
 - Add `terraform plan` checks in CI with Conftest on the plan JSON.
 - Pin every GitHub Action to a full commit SHA.
 - Add more custom Rego rules, such as mandatory encryption on all buckets.
-
-## Disclaimer
-
-The credentials in `insecure/main.tf` are the public example keys from AWS documentation, not real secrets. The `insecure/` stack is for demonstration only and must never be deployed.
