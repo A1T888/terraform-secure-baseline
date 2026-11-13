@@ -2,7 +2,7 @@
 
 [![terraform-security](https://github.com/A1T888/terraform-secure-baseline/actions/workflows/security.yml/badge.svg)](https://github.com/A1T888/terraform-secure-baseline/actions/workflows/security.yml)
 
-A zero-cost Terraform security demo. The same small AWS stack is written twice: `insecure/` (deliberately flawed) and `secure/` (hardened). Free scanners and policy-as-code show the difference, and a CI pipeline enforces it. Each fix is mapped to an ISO/IEC 27001:2022 Annex A control.
+Terraform security demo. The same small AWS stack is written twice: `insecure/` (deliberately flawed) and `secure/` (hardened). Free scanners and policy-as-code show the difference, and a CI pipeline enforces it. Each fix is mapped to an ISO/IEC 27001:2022 Annex A control.
 
 **Nothing is deployed and no cloud account is needed.** Everything runs as static analysis on the `.tf` files.
 
